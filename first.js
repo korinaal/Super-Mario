@@ -5,6 +5,7 @@ var first = {
 		this.load.spritesheet('monster', 'assets/monster.png', 16, 16);
 		this.load.spritesheet('mario', 'assets/flash.png', 16, 16);
 		this.load.spritesheet('coin', 'assets/coin.png', 16, 16);
+		this.load.spritesheet('stage', 'assets/stage.png', 16, 16);
             	this.load.audio('music','audio/music.ogg');
             	this.load.audio('run','audio/run.ogg');
             	this.load.audio('coinsound','audio/coin_pick.ogg');
@@ -13,7 +14,6 @@ var first = {
             	this.load.audio('jump','audio/jump.wav');
             	this.load.image('headlives','assets/lives.png');
 		this.load.tilemap('level', 'assets/super_mario_map.json', null,Phaser.Tilemap.TILED_JSON);
-		this.load.image('win','assets/win.png');
 		this.load.image('lose','assets/lose.png');
 	},
 	create: function(){
@@ -29,6 +29,10 @@ var first = {
 
 		layer = map.createLayer('solid');
 		layer.resizeWorld();
+		
+		stages = game.add.group();
+		stages.enableBody = true;
+		map.createFromTiles(16, null, 'stage', 'stuff', stages);
 
 		coins = game.add.group();
 		coins.enableBody = true;
@@ -96,6 +100,7 @@ var first = {
 		game.physics.arcade.overlap(player, goombas, goombaOverlap);
 		game.physics.arcade.overlap(player, monsters, monsterOverlap);
 		game.physics.arcade.overlap(player, coins, coinOverlap);
+		game.physics.arcade.overlap(player, stages, stageOverlap);
             	scoretext.text = 'Score '+score;
             	livestext.text = lives+"x";
 		if (player.body.enable) {

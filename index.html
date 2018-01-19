@@ -13,6 +13,7 @@ body {
 <script src="menu.js"></script>
 <script src="first.js"></script>
 <script src="second.js"></script>
+<script src="third.js"></script>
 <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
 </head>
 <body>
@@ -25,12 +26,13 @@ body {
 
 			//  We need this because the assets are on github pages
 			//  Remove the next 2 lines if running locally
-			//this.load.baseURL = 'https://korinaal.github.io/Super-Mario/';
+			//this.load.baseURL = 'https://ioniodi.github.io/Super-Mario/';
 			//this.load.crossOrigin = 'anonymous';
 		}
 
 		game.state.add('first',first);
 		game.state.add('second',second);
+		game.state.add('third',third);
 		game.state.add('menu',menu);
 		game.state.start('menu');
 		var coins_collected=0;
@@ -41,14 +43,26 @@ body {
 			coin.kill();
 			coins_collected++;
 			if(coins_collected==85){
-				var victory=game.add.sprite(0,0,'win');
-				victory.fixedToCamera=true;
-				game.time.events.add(Phaser.Timer.SECOND, function() {
-					location.reload();
-				});
+				
 			}
 		}
-
+		function stageOverlap(player,stage){
+			stage.kill();
+			game.time.events.add(Phaser.Timer.SECOND, function() {
+				game.state.start('third');
+			});
+		}
+		function cloudOverlap(player,cloud){
+			cloud.kill();
+			var victory=game.add.sprite(0,0,'win');
+			victory.fixedToCamera=true;
+			game.time.events.add(Phaser.Timer.SECOND, function() {
+				lives=3;
+				score=0;
+				coins_collected=0;
+				game.state.start('menu');
+			});
+		}
 		function goombaOverlap(player, goomba) {
 			if (player.body.touching.down) {
                 		stompsound.play();

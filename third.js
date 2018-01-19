@@ -1,11 +1,11 @@
-var second = {
+var third = {
 	preload: function(){
 		this.load.spritesheet('tiles', 'assets/super_mario_tiles.png', 16,16);
 		this.load.spritesheet('goomba', 'assets/goomba.png', 16, 16);
 		this.load.spritesheet('monster', 'assets/monster.png', 16, 16);
 		this.load.spritesheet('mario', 'assets/flash.png', 16, 16);
 		this.load.spritesheet('coin', 'assets/coin.png', 16, 16);
-		this.load.spritesheet('stage', 'assets/stage.png', 16, 16);
+		this.load.spritesheet('cloud', 'assets/cloud.png', 16, 16);
             	this.load.audio('music','audio/music.ogg');
             	this.load.audio('run','audio/run.ogg');
             	this.load.audio('coinsound','audio/coin_pick.ogg');
@@ -13,13 +13,14 @@ var second = {
             	this.load.audio('stompsound','audio/stomp.ogg');
             	this.load.audio('jump','audio/jump.wav');
             	this.load.image('headlives','assets/lives.png');
-		this.load.tilemap('level', 'assets/super_mario_map_1.json', null,Phaser.Tilemap.TILED_JSON);
+		this.load.tilemap('level', 'assets/super_mario_map_2.json', null,Phaser.Tilemap.TILED_JSON);
 		this.load.image('lose','assets/lose.png');
+		this.load.image('win','assets/win.png');
 	},
 	create: function(){
 		Phaser.Canvas.setImageRenderingCrisp(game.canvas);
 
-		game.stage.backgroundColor = '#c5b358';
+		game.stage.backgroundColor = '#e5c100';
 
 		map = game.add.tilemap('level');
 		map.addTilesetImage('tiles', 'tiles');
@@ -30,10 +31,10 @@ var second = {
 		layer = map.createLayer('solid');
 		layer.resizeWorld();
 
-		stages = game.add.group();
-		stages.enableBody = true;
-		map.createFromTiles(16, null, 'stage', 'stuff', stages);
-
+		clouds = game.add.group();
+		clouds.enableBody = true;
+		map.createFromTiles(17, null, 'cloud', 'stuff', clouds);
+		
 		coins = game.add.group();
 		coins.enableBody = true;
 		map.createFromTiles(2, null, 'coin', 'stuff', coins);
@@ -100,7 +101,7 @@ var second = {
 		game.physics.arcade.overlap(player, goombas, goombaOverlap);
 		game.physics.arcade.overlap(player, monsters, monsterOverlap);
 		game.physics.arcade.overlap(player, coins, coinOverlap);
-		game.physics.arcade.overlap(player, stages, stageOverlap);
+		game.physics.arcade.overlap(player, clouds, cloudOverlap);
             	scoretext.text = 'Score '+score;
             	livestext.text = lives+"x";
 		if (player.body.enable) {
